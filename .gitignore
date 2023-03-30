@@ -10,8 +10,8 @@ app/**/*.js
 app/**/*.js.map
 
 # dependencies
-frontend/node_modules/
-frontend/bower_components/
+node_modules/
+bower_components/
 
 # IDEs and editors
 .idea/
@@ -24,11 +24,11 @@ libpeerconnection.log/
 npm-debug.log
 testem.log
 typings/
-frontend/.angular/
+.angular/
 
 # e2e
-frontend/e2e/*.js
-frontend/e2e/*.map
+e2e/*.js
+e2e/*.map
 
 # System Files
 .DS_Store/
