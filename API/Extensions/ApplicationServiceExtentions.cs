@@ -10,7 +10,7 @@ namespace API.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, 
             IConfiguration config)
         {
-            // Default Connecction should be added in appsettings.json file
+            // DefaultConnection should be added in appsettings.json file
             // Program file will pick it up from appsettings.json file
             services.AddDbContext<DataContext>(p =>
             {
