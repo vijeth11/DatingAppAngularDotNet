@@ -22,6 +22,10 @@ namespace API.Extensions
             //builder.Services.AddScoped<TokenService>(); --this can be used but it is good practice to have interface
             services.AddScoped<ITokenService, TokenService>();
 
+            services.AddScoped<IUserRepository, UserRepository>();
+
+            // for injecting automapper into controller 
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             return services;
         }
     }

@@ -22,9 +22,9 @@ namespace API.Data.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                 });
-            migrationBuilder.InsertData("Users", new[] { "Id", "UserName" }, new object[] { 1, "bob" });
-            migrationBuilder.InsertData("Users", new[] { "Id", "UserName" }, new object[] { 2, "tom" });
-            migrationBuilder.InsertData("Users", new[] { "Id", "UserName" }, new object[] { 3, "jane" });
+            //migrationBuilder.InsertData("Users", new[] { "Id", "UserName" }, new object[] { 1, "bob" });
+            //migrationBuilder.InsertData("Users", new[] { "Id", "UserName" }, new object[] { 2, "tom" });
+            //migrationBuilder.InsertData("Users", new[] { "Id", "UserName" }, new object[] { 3, "jane" });
         }
 
         /// <inheritdoc />
