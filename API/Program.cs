@@ -16,6 +16,7 @@ builder.Services.AddApplicationServices(builder.Configuration);
 
 // Extension methods defined in Api.Extensions folder
 // to make program.cs file look good
+// this will be used by .net Authorization [Authorize] to authenticate
 builder.Services.AddIdentityServices(builder.Configuration);
 
 var app = builder.Build();
