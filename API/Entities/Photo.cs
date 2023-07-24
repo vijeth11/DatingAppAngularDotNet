@@ -7,6 +7,8 @@ namespace API.Entities
      * We do not want direct access to that table through DBContext 
      * We can add the Table attribute. this will create the table and add setup the relationship
      * with other table
+     * AppUser property is added to make sure entity creates photo table where it has to be associated with the 
+     * appUser and appuser cannot be nullable
      */
     [Table("Photos")]
     public class Photo
@@ -14,8 +16,7 @@ namespace API.Entities
         public int Id { get; set; }
         public string Url { get; set; }
         public bool IsMain { get; set; }
-        public string PublicId { get; set; }
-
+        public string PublicId { get; set; }    
         public int AppUserId { get; set; }
         public AppUser AppUser { get; set; }
 

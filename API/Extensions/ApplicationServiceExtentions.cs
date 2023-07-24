@@ -1,7 +1,9 @@
 ﻿using API.Data;
+using API.Helpers;
 using API.Interfaces;
 using API.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace API.Extensions
 {
@@ -26,6 +28,9 @@ namespace API.Extensions
 
             // for injecting automapper into controller 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            //configuration of firebase storage used in PhotoService
+            services.Configure<FirebaseStorageSettings>(config.GetSection("FirebaseStorageSettings"));
+            services.AddScoped<IPhotoService, PhotoService>();
             return services;
         }
     }
