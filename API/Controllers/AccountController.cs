@@ -2,6 +2,7 @@
 using API.Dto;
 using API.Entities;
 using API.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
@@ -15,11 +16,13 @@ namespace API.Controllers
         private readonly DataContext _context;
         private readonly ITokenService _tokenService;
         private readonly IUserRepository _userRepository;
-        public AccountController(DataContext context, ITokenService tokenService, IUserRepository userRepository)
+        private readonly IMapper _mapper;
+        public AccountController(DataContext context, ITokenService tokenService, IUserRepository userRepository, IMapper mapper)
         {
             _context = context;
             _tokenService = tokenService;
             _userRepository = userRepository;
+            _mapper = mapper;
         }
 
         [HttpPost("register")] //POST: api/account/register
@@ -33,15 +36,20 @@ namespace API.Controllers
             {
                 return BadRequest("Username is taken");
             }
+            var user = _mapper.Map<AppUser>(register);
+
             using var hmac = new HMACSHA512();
-            var user = new AppUser() { 
-                UserName=register.Username.ToLower(),
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(register.Password)),
-                PasswordSalt = hmac.Key
-            };
+            user.UserName = register.Username.ToLower();
+            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(register.Password));
+            user.PasswordSalt = hmac.Key;
+            
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
-            return Ok(new UserDto() { Username = user.UserName, Token = _tokenService.CreateToken(user) });
+            return Ok(new UserDto() { 
+                Username = user.UserName, 
+                Token = _tokenService.CreateToken(user), 
+                KnownAs = user.KnownAs 
+            });
         }
 
         [HttpPost("login")]
@@ -60,7 +68,12 @@ namespace API.Controllers
                     return Unauthorized("invalid password");
             }
 
-            return Ok(new UserDto() { Username = user.UserName, Token = _tokenService.CreateToken(user), PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain).Url });
+            return Ok(new UserDto() { 
+                Username = user.UserName, 
+                Token = _tokenService.CreateToken(user),
+                PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain).Url,
+                KnownAs = user.KnownAs
+            });
         }
         private async Task<bool> UserExixts (string username)
         {
