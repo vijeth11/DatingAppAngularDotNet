@@ -14,6 +14,10 @@ export class MemberDetailComponent implements OnInit {
   galleryOptions: NgxGalleryOptions[] = [];
   galleryImages: NgxGalleryImage[] = [];
 
+  public get lastActiveDate(): number {
+    return (new Date(this.member?.lastActive||'')).valueOf();
+  }
+
   constructor(private memberService: MembersService, private route: ActivatedRoute) {
 
   }
