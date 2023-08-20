@@ -27,6 +27,8 @@ namespace API.Extensions
 
             services.AddScoped<IUserRepository, UserRepository>();
 
+            services.AddScoped<ILikesRepository, LikesRepository>();
+
             // for injecting automapper into controller 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             //configuration of firebase storage used in PhotoService
