@@ -1,4 +1,6 @@
 ﻿using API.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -6,7 +8,11 @@ namespace API.Data
 {
     // Install EntityFrameworkCore,EntityFrameworkCoreDesign,EntityFrameworkCoreSqlServer from nuget packages
     // Create a class that extends DbContext and add it in program file
-    public class DataContext: DbContext
+    // Added all these types because we are using int for Id instead of string provided by Identity class
+    // If you use custom type for ID we need to mention all the places where we are using custom type for Id in below order
+    public class DataContext: IdentityDbContext<AppUser, AppRole, int, 
+        IdentityUserClaim<int>,AppUserRole, IdentityUserLogin<int>, 
+        IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
 
         public DataContext(DbContextOptions options):base(options) { }
@@ -17,13 +23,25 @@ namespace API.Data
                    .HaveConversion<DateOnlyConverter>()
                    .HaveColumnType("date");
         }
-
-        public DbSet<AppUser> Users { get; set; }
+        // IdentityDbContext already has a Dbset for users so no need to add        
         public DbSet<UserLike> Likes { get; set; }
         public DbSet<Message> Messages { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<AppUser>()
+                .HasMany(ur => ur.UserRoles)
+                .WithOne(u => u.User)
+                .HasForeignKey(u => u.UserId)
+                .IsRequired();
+
+            modelBuilder.Entity<AppRole>()
+                .HasMany(ur => ur.UserRoles)
+                .WithOne(u => u.Role)
+                .HasForeignKey(u => u.RoleId)
+                .IsRequired();
+
             modelBuilder.Entity<UserLike>()
                 .HasKey(k => new { k.SourceUserId, k.TargetUserId });
             modelBuilder.Entity<UserLike>()

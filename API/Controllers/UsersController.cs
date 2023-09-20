@@ -22,6 +22,7 @@ namespace API.Controllers
             _photoService = photoService;
         }
 
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery]UserParams userParams) {
             var currentUser = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
