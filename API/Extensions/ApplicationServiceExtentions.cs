@@ -34,10 +34,15 @@ namespace API.Extensions
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             //configuration of firebase storage used in PhotoService
             services.Configure<FirebaseStorageSettings>(config.GetSection("FirebaseStorageSettings"));
+
             services.AddScoped<IPhotoService, PhotoService>();
+
             services.AddScoped<IMessageRepository, MessageRepository>();
+
             services.AddScoped<LogUserActivity>();
+
             services.AddSignalR();
+
             services.AddSingleton<PresenceTracker>();
             return services;
         }
