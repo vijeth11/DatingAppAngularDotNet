@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Data
 {
@@ -23,11 +24,7 @@ namespace API.Data
                    .HaveConversion<DateOnlyConverter>()
                    .HaveColumnType("date");
         }
-        // IdentityDbContext already has a Dbset for users so no need to add        
-        public DbSet<UserLike> Likes { get; set; }
-        public DbSet<Message> Messages { get; set; }
-        public DbSet<Group> Groups { get; set; }
-        public DbSet<Connection> Connections { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -68,9 +65,16 @@ namespace API.Data
                 .WithMany(l => l.MessagesSent)
                 .OnDelete(DeleteBehavior.Restrict);
 
-
+            modelBuilder.Entity<Photo>()
+                .HasQueryFilter(p => p.IsApproved);
         }
 
+        // IdentityDbContext already has a Dbset for users so no need to add        
+        public DbSet<UserLike> Likes { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<Connection> Connections { get; set; }        
+        public DbSet<Photo> Photos { get; set; }
     }
 
     /// <summary>

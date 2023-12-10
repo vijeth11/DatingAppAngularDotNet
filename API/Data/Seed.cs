@@ -34,6 +34,7 @@ namespace API.Data
             foreach(var user in users)
             {
                 user.UserName = user.UserName.ToLower();
+                user.Photos.First().IsApproved = true;
                 //Now password hashing is handeled by Identity
                 /*using var hmac = new HMACSHA512();
                 

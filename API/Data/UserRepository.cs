@@ -18,7 +18,7 @@ namespace API.Data
             _mapper = mapper;
         }
 
-        public async Task<MemberDto> GetMemberAsync(string username)
+        public async Task<MemberDto> GetMemberAsync(string username, bool isCurrentUser)
         {
             // this reduces select query to bring only the data which are sent by
             // API of type MemberDto instead of query for all unwanted properties of 
@@ -30,10 +30,14 @@ namespace API.Data
             // after modifing as below. So inorder to overcome this we need to add Customization of 
             // mapping certain members of DTO in automapper configuration itself as done for age property
             // of the DTO
-            return await _context.Users
+            var query =  _context.Users
                 .Where(x => x.UserName == username)
                 .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
-                .SingleOrDefaultAsync();
+                .AsQueryable();
+
+            if(isCurrentUser) query.IgnoreQueryFilters();
+
+            return await query.SingleOrDefaultAsync();
         }
 
         public async Task<AppUser> GetUserByIdAsync(int id)
@@ -80,6 +84,15 @@ namespace API.Data
             return await _context.Users
                 .Where(x => x.UserName == username)
                 .Select(x => x.Gender).FirstOrDefaultAsync();
+        }
+
+        public async Task<AppUser> GetUserByPhotoId(int photoId)
+        {
+            return await this._context.Users
+                        .Include(p => p.Photos)
+                        .IgnoreQueryFilters()
+                        .Where(u => u.Photos.Any(p => p.Id == photoId))
+                        .FirstOrDefaultAsync();
         }
     }
 }

@@ -39,6 +39,8 @@ namespace API.Extensions
 
             services.AddScoped<IMessageRepository, MessageRepository>();
 
+            services.AddScoped<IPhotoRepository, PhotoRepository>();
+
             services.AddScoped<LogUserActivity>();
 
             services.AddSignalR();

@@ -15,11 +15,13 @@ namespace API.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IPhotoService _photoService;
+        private readonly IPhotoRepository _photoRepository;
         private readonly IMapper _mapper;
-        public UsersController(IUserRepository userRepository, IMapper mapper, IPhotoService photoService) {
+        public UsersController(IUserRepository userRepository, IMapper mapper, IPhotoService photoService,IPhotoRepository photoRepository) {
             _userRepository = userRepository;
             _mapper = mapper;
             _photoService = photoService;
+            _photoRepository = photoRepository;
         }
 
         
@@ -53,7 +55,8 @@ namespace API.Controllers
         [HttpGet("name/{username}")] // api/user/name/{username}
         public async Task<ActionResult<MemberDto>> GetUser(string username)
         {
-            var user  = await _userRepository.GetMemberAsync(username);
+            var currentUsername = User.GetUsername();
+            var user  = await _userRepository.GetMemberAsync(username,username == currentUsername);
             if (user == null)
             {
                 return NotFound();
@@ -100,7 +103,7 @@ namespace API.Controllers
 
             };
 
-            if(user.Photos.Count == 0) photo.IsMain = true;
+            //if(user.Photos.Count == 0) photo.IsMain = true;
 
             user.Photos.Add(photo);
 
@@ -155,7 +158,7 @@ namespace API.Controllers
             {
                 return NotFound();
             }
-            var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
+            var photo = await this._photoRepository.GetPhotoById(photoId);
             if(photo == null)
             {
                 return NotFound();

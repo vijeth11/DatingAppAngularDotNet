@@ -157,3 +157,4 @@ C:\Users\vijet\Documents\GitHub\DatingApp\API\bin\Debug\net7.0\Microsoft.AspNetC
 C:\Users\vijet\Documents\GitHub\DatingApp\API\bin\Debug\net7.0\Microsoft.Extensions.Identity.Core.dll
 C:\Users\vijet\Documents\GitHub\DatingApp\API\bin\Debug\net7.0\Microsoft.Extensions.Identity.Stores.dll
 C:\Users\vijet\Documents\GitHub\DatingApp\API\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
+C:\Users\vijet\Documents\GitHub\DatingApp\API\bin\Debug\net7.0\API.staticwebassets.runtime.json
